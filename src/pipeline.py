@@ -7,7 +7,7 @@ from feature_extraction import create_advanced_features
 from models import RidgeRegression, LassoRegression
 
 # Load data
-df = pd.read_csv("data/raw/traffic.csv")
+df = pd.read_csv("data/processed/cleaned_traffic.csv")
 
 # Rename column properly
 if 'Vehicles' in df.columns:

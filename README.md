@@ -19,7 +19,24 @@ The system addresses the traffic prediction problem through a dual-task formulat
 * **Time-Series Validation:** Time-based Cross-Validation to prevent data leakage during model training.
 
 ---
-
+### Project Pipeline
+```text
+Raw Data
+   ↓
+Data Preprocessing
+   ↓
+Feature Engineering
+   ↓
+Baseline Model
+   ↓
+Regularized Models (Ridge, Lasso)
+   ↓
+Tree-Based Models
+   ↓
+Ensemble Models
+   ↓
+Prediction + Classification
+```
 ##  Repository Structure
 
 ```text

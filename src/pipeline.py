@@ -16,7 +16,7 @@ if 'Vehicles' in df.columns:
 # After feature engineering
 df = create_advanced_features(df)
 
-df = df.dropna()   # ✅ IMPORTANT
+df = df.dropna()  
 
 # Drop non-numeric columns
 for col in ['DateTime', 'Junction', 'ID']:
@@ -53,7 +53,8 @@ print("Ridge MSE:", mean_squared_error(y_test, ridge_pred))
 print("Lasso MSE:", mean_squared_error(y_test, lasso_pred))
 print("Ridge Weights:", ridge.W)
 print("Lasso Weights:", lasso.W)
-
+print("\nDifference (Ridge - Lasso):",
+      mean_squared_error(y_test, ridge_pred) - mean_squared_error(y_test, lasso_pred))
 # Feature importance
 def plot_weights(model, feature_names, title):
     plt.bar(feature_names, model.W)
@@ -63,3 +64,5 @@ def plot_weights(model, feature_names, title):
 
 plot_weights(ridge, X.columns, "Ridge Importance")
 plot_weights(lasso, X.columns, "Lasso Importance")
+if mean_squared_error(y_test, lasso_pred) < mean_squared_error(y_test, ridge_pred):
+    print("\nLasso performed better → indicates irrelevant features were removed.")

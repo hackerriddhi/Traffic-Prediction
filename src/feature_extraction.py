@@ -2,11 +2,13 @@ import pandas as pd
 
 def create_advanced_features(df):
 
+    df = df.copy()
+    
     # Lag feature
-    df['lag_1'] = df['traffic'].shift(1)
+    df['lag_1'] = df['Vehicles'].shift(1)
 
     # Rolling mean
-    df['rolling_mean_3'] = df['traffic'].rolling(window=3).mean()
+    df['rolling_mean_3'] = df['Vehicles'].rolling(window=3).mean()
 
     
     # Fill missing values

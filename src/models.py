@@ -1,5 +1,5 @@
 import numpy as np
-
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 class RidgeRegression:
     def __init__(self, lr=0.001, epochs=1000, alpha=1):
         self.lr = lr
@@ -46,3 +46,10 @@ class LassoRegression:
 
     def predict(self, X):
         return X.dot(self.W) + self.b
+    
+def evaluate(y_true, y_pred):
+    return {
+        "MAE": mean_absolute_error(y_true, y_pred),
+        "RMSE": np.sqrt(mean_squared_error(y_true, y_pred)),
+        "R2": r2_score(y_true, y_pred)
+    }

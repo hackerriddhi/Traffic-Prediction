@@ -1,68 +1,108 @@
+# src/pipeline.py
+
 import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
-from feature_extraction import create_advanced_features
-from models import RidgeRegression, LassoRegression
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 
-# Load data
-df = pd.read_csv("../data/processed/cleaned_traffic.csv")
+from src.feature_extraction import create_advanced_features
+from src.advanced_models import (
+    time_series_split,
+    train_gradient_boosting,
+    ensemble_predict
+)
+from src.models import evaluate
+import matplotlib.pyplot as plt
+from src.advanced_models import train_xgb
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
-# Rename column properly
+# ======================
+# LOAD + PREPROCESS
+# ======================
+df = pd.read_csv("data/processed/cleaned_traffic.csv")
+
+df.columns = df.columns.str.strip()
+
 if 'Vehicles' in df.columns:
     df.rename(columns={'Vehicles': 'traffic'}, inplace=True)
 
-# After feature engineering
 df = create_advanced_features(df)
+df = df.dropna()
 
-df = df.dropna()  
-
-# Drop non-numeric columns
+# Drop non-numeric
 for col in ['DateTime', 'Junction', 'ID']:
     if col in df.columns:
         df.drop(columns=[col], inplace=True)
 
-# Prepare data
+# ======================
+# FEATURES
+# ======================
 X = df.drop(columns=['traffic'])
 y = df['traffic']
 
 X = X.select_dtypes(include=['number'])
 
-# Split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
 
-# Scaling
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
-# Initialize models
-ridge = RidgeRegression()
-lasso = LassoRegression()
-# Models (NO .values)
-ridge.fit(X_train, y_train)
-ridge_pred = ridge.predict(X_test)
+# ======================
+# TRAINING LOOP (TIME SERIES)
+# ======================
+all_results = []
 
-lasso.fit(X_train, y_train)
-lasso_pred = lasso.predict(X_test)
+def classify_traffic(y):
+    return pd.cut(y, bins=3, labels=["Low", "Medium", "High"])
 
-# Evaluation
-print("Ridge MSE:", mean_squared_error(y_test, ridge_pred))
-print("Lasso MSE:", mean_squared_error(y_test, lasso_pred))
-print("Ridge Weights:", ridge.W)
-print("Lasso Weights:", lasso.W)
-print("\nDifference (Ridge - Lasso):",
-      mean_squared_error(y_test, ridge_pred) - mean_squared_error(y_test, lasso_pred))
-# Feature importance
-def plot_weights(model, feature_names, title):
-    plt.bar(feature_names, model.W)
-    plt.title(title)
-    plt.xticks(rotation=45)
+for X_train, X_test, y_train, y_test in time_series_split(X, y):
+    
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    # Models
+    lr = LinearRegression().fit(X_train, y_train)
+    rf = RandomForestRegressor(n_estimators=100).fit(X_train, y_train)
+    gb = train_gradient_boosting(X_train, y_train)
+    xgb = train_xgb(X_train, y_train)   # NEW
+    
+    # Convert to classification labels
+    y_train_cls = classify_traffic(y_train)
+    y_test_cls = classify_traffic(y_test)
+
+# Train classifier
+    clf = RandomForestClassifier()
+    clf.fit(X_train, y_train_cls)
+
+# Predict
+    y_pred_cls = clf.predict(X_test)
+
+    print("Classification Sample:", y_pred_cls[:10])
+
+    # Predictions
+    lr_pred = lr.predict(X_test)
+    rf_pred = rf.predict(X_test)
+    gb_pred = gb.predict(X_test)
+    xgb_pred = xgb.predict(X_test)      # NEW
+
+    # Ensemble
+    ensemble_pred = ensemble_predict([lr, rf, gb, xgb], X_test)
+    print("Classification Accuracy:",
+      accuracy_score(y_test_cls, y_pred_cls))
+    # Evaluation
+    print("\n--- Fold Results ---")
+    print("Linear:", evaluate(y_test, lr_pred))
+    print("Random Forest:", evaluate(y_test, rf_pred))
+    print("Gradient Boosting:", evaluate(y_test, gb_pred))
+    print("XGBoost:", evaluate(y_test, xgb_pred))   # NEW
+    print("Ensemble:", evaluate(y_test, ensemble_pred))
+
+    all_results.append(evaluate(y_test, ensemble_pred))
+    
+    # 🔥 VISUALIZATION (REQUIRED)
+    plt.figure()
+    plt.plot(y_test.values, label="Actual")
+    plt.plot(ensemble_pred, label="Predicted")
+    plt.legend()
+    plt.title("Traffic Prediction (Fold)")
     plt.show()
 
-plot_weights(ridge, X.columns, "Ridge Importance")
-plot_weights(lasso, X.columns, "Lasso Importance")
-if mean_squared_error(y_test, lasso_pred) < mean_squared_error(y_test, ridge_pred):
-    print("\nLasso performed better → indicates irrelevant features were removed.")
+print("\nFinal Results:", all_results)

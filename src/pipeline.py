@@ -1,5 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
@@ -48,7 +48,7 @@ for col in ['DateTime', 'Junction', 'ID']:
 
 # EDA
 
-advanced_eda(df)
+# advanced_eda(df)
 
 # TREND ANALYSIS 
 
@@ -76,21 +76,21 @@ def classify_traffic(y):
     return pd.cut(y, bins=3, labels=["Low", "Medium", "High"])
 
 
-def plot_weights(model, feature_names, title):
-    weights = getattr(model, 'W', None)
+# def plot_weights(model, feature_names, title):
+#     weights = getattr(model, 'W', None)
 
-    if weights is None:
-        print(f"{title}: No weights available")
-        return
+#     if weights is None:
+#         print(f"{title}: No weights available")
+#         return
 
-    plt.figure()
-    plt.bar(feature_names, weights)
-    plt.title(title)
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show(block=False)
-    plt.pause(2)
-    plt.close()
+#     plt.figure()
+#     plt.bar(feature_names, weights)
+#     plt.title(title)
+#     plt.xticks(rotation=45)
+#     plt.tight_layout()
+#     plt.show(block=False)
+#     plt.pause(2)
+#     plt.close()
 
 
 def select_features_lasso(model, feature_names, threshold=0.01):
@@ -129,9 +129,9 @@ for X_train, X_test, y_train, y_test in time_series_split(X, y):
     print("Ridge MSE:", mean_squared_error(y_test, ridge_pred))
     print("Lasso MSE:", mean_squared_error(y_test, lasso_pred))
 
-    # Feature importance
-    plot_weights(ridge, X.columns, "Ridge Importance")
-    plot_weights(lasso, X.columns, "Lasso Importance")
+    # # Feature importance
+    # plot_weights(ridge, X.columns, "Ridge Importance")
+    # plot_weights(lasso, X.columns, "Lasso Importance")
 
     # Feature selection
     selected_features = select_features_lasso(lasso, X.columns)
@@ -178,14 +178,14 @@ for X_train, X_test, y_train, y_test in time_series_split(X, y):
 
     # VISUALIZATION
 
-    plt.figure()
-    plt.plot(y_test.values, label="Actual")
-    plt.plot(ensemble_pred, label="Predicted")
-    plt.legend()
-    plt.title("Traffic Prediction (Fold)")
-    plt.show(block=False)
-    plt.pause(2)
-    plt.close()
+    #plt.figure()
+   # plt.plot(y_test.values, label="Actual")
+    # plt.plot(ensemble_pred, label="Predicted")
+    # plt.legend()
+#     plt.title("Traffic Prediction (Fold)")
+#    #  plt.show(block=False)
+#     plt.pause(2)
+#     plt.close()
 
     # Store results
     all_results.append(evaluate(y_test, ensemble_pred))

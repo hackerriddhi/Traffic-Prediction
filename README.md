@@ -1,16 +1,17 @@
 # Traffic Prediction — PRML Course Project
 
-A data-driven, end-to-end machine learning system that forecasts urban traffic volume and classifies congestion levels (Low / Medium / High) from historical traffic data. Built as a team project for a **Pattern Recognition and Machine Learning (PRML)** course, this system covers the full ML pipeline — from raw data cleaning to ensemble modeling — and includes an interactive prediction frontend.
+A data-driven, end-to-end machine learning system that forecasts urban traffic volume and classifies congestion levels (**Low / Medium / High**) from historical traffic data. Built as part of a **Pattern Recognition and Machine Learning (PRML)** course, this project covers the full ML pipeline — from preprocessing to ensemble modeling.
 
 ---
 
 ## Team & Module Ownership
 
-| Member | Module | Core Responsibility |
-| **Radhika** | Data Pipeline + Statistical Analysis + Baseline Models | Data preprocessing, EDA, Linear Regression from scratch |
-| **Riddhi** | Advanced EDA + Feature Engineering + Regularization | Lag features, rolling averages, Ridge & Lasso Regression |
-| **Utkarsha** | Non-Linear Models + Decision Systems | Decision Tree, Random Forest, congestion classification |
-| **Akshaya** | Advanced Modeling + Time-Series + Deployment | XGBoost, Gradient Boosting, ensemble pipeline, frontend |
+| Member   | Module                               | Core Responsibility                                       |
+| -------- | ------------------------------------ | --------------------------------------------------------- |
+| Radhika  | Data Pipeline + Statistical Analysis | Data preprocessing, EDA, Linear Regression (from scratch) |
+| Riddhi   | Feature Engineering + Regularization | Lag features, rolling averages, Ridge & Lasso             |
+| Utkarsha | Non-Linear Models                    | Decision Tree, Random Forest, classification              |
+| Akshaya  | Advanced Models + Deployment         | XGBoost, Gradient Boosting, ensemble pipeline             |
 
 ---
 
@@ -25,11 +26,11 @@ A data-driven, end-to-end machine learning system that forecasts urban traffic v
 
 * Linear Regression (from scratch)
 * Bias–Variance Tradeoff
-* Ridge & Lasso
+* Ridge & Lasso Regression
 * Multicollinearity
 * Decision Trees & Random Forest
 * Gradient Boosting / XGBoost
-* Feature Engineering
+* Feature Engineering (lag, rolling features)
 * Time-Series Cross-Validation
 * Ensemble Learning
 
@@ -65,12 +66,19 @@ Traffic-Prediction/
 
 ---
 
-## How to Run
+## ⚙️ Installation
 
 ```bash
 git clone https://github.com/hackerriddhi/Traffic-Prediction
 cd Traffic-Prediction
 pip install -r requirements.txt
+```
+
+---
+
+## ▶️ Run the Project
+
+```bash
 python -m src.pipeline
 ```
 
@@ -103,4 +111,3 @@ python -m src.pipeline
 * Urban planning
 
 ---
-

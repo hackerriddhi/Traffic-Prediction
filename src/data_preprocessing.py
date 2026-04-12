@@ -54,7 +54,7 @@ def extract_time_features(df):
     return df_features
 
 if __name__ == "__main__":
-    # This block runs if you execute `python src/data_preprocessing.py`
+    
     # 1. Load raw data
     raw_path = "../data/raw/traffic.csv"
     processed_path = "../data/processed/cleaned_traffic.csv"

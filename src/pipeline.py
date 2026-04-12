@@ -178,14 +178,14 @@ for X_train, X_test, y_train, y_test in time_series_split(X, y):
 
     # VISUALIZATION
 
-    #plt.figure()
-   # plt.plot(y_test.values, label="Actual")
+    # plt.figure()
+    # plt.plot(y_test.values, label="Actual")
     # plt.plot(ensemble_pred, label="Predicted")
     # plt.legend()
-#     plt.title("Traffic Prediction (Fold)")
-#    #  plt.show(block=False)
-#     plt.pause(2)
-#     plt.close()
+    # plt.title("Traffic Prediction (Fold)")
+    # plt.show(block=False)
+    # plt.pause(2)
+    # plt.close()
 
     # Store results
     all_results.append(evaluate(y_test, ensemble_pred))

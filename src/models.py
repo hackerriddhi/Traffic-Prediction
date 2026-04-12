@@ -77,7 +77,7 @@ def compare_regularization(y_test, ridge_pred, lasso_pred):
 def check_multicollinearity(X):
     X = X.copy()
 
-    # Remove constant columns (important fix)
+    # Remove constant columns
     X = X.loc[:, X.nunique() > 1]
 
     vif_data = pd.DataFrame()

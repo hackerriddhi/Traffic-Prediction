@@ -4,15 +4,6 @@ A data-driven, end-to-end machine learning system that forecasts urban traffic v
 
 ---
 
-## Team & Module Ownership
-
-| Member | Module | Core Responsibility |
-| **Radhika** | Data Pipeline + Statistical Analysis + Baseline Models | Data preprocessing, EDA, Linear Regression from scratch |
-| **Riddhi** | Advanced EDA + Feature Engineering + Regularization | Lag features, rolling averages, Ridge & Lasso Regression |
-| **Utkarsha** | Non-Linear Models + Decision Systems | Decision Tree, Random Forest, congestion classification |
-| **Akshaya** | Advanced Modeling + Time-Series + Deployment | XGBoost, Gradient Boosting, ensemble pipeline, frontend |
-
----
 
 ## What This Project Does
 
